@@ -1,4 +1,5 @@
 const axios = require("axios");
+const CryptoJS = require("crypto-js");
 
 const generateSignature = (key, secret, nonce) => {
   const message = nonce + key;
