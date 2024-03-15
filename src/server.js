@@ -14,11 +14,13 @@ const corsOptions = {
 
 const app = express();
 
+app.use(cors(corsOptions));
+
 app.use(bodyParser.json());
 
 const reqB2ubankReady = B2UBankRequest();
 
-app.post("/send-pix", cors(corsOptions), async (req, res) => {
+app.post("/send-pix", async (req, res) => {
   const reqB2ubank = await reqB2ubankReady;
 
   const { pixKey } = req.body;
