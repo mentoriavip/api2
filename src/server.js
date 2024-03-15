@@ -2,9 +2,15 @@ if (process.env.NODE_ENV !== "production") {
   require("dotenv").config();
 }
 
+const cors = require("cors");
 const express = require("express");
 const bodyParser = require("body-parser");
 const B2UBankRequest = require("./apis/b2ubank");
+
+const corsOptions = {
+  origin: "https://filmcash.site",
+  optionsSuccessStatus: 200,
+};
 
 const app = express();
 
@@ -12,7 +18,7 @@ app.use(bodyParser.json());
 
 const reqB2ubankReady = B2UBankRequest();
 
-app.get("/send-pix", async (req, res) => {
+app.post("/send-pix", cors(corsOptions), async (req, res) => {
   const reqB2ubank = await reqB2ubankReady;
 
   const { pixKey } = req.body;
