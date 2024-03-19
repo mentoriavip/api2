@@ -11,7 +11,7 @@ const generateSignature = (key, secret, nonce) => {
 
 const B2UBankRequest = async () => {
   return axios.create({
-    baseURL: "https://back.b2ubank.com/api/v1/",
+    baseURL: "https://back.b2ubank.com/api/v1",
     headers: {
       key: process.env.EFI_CLIENT_KEY,
       nonce: Date.now(),

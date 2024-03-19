@@ -14,21 +14,20 @@ const corsOptions = {
 
 const app = express();
 
-app.use(cors(corsOptions));
-
 app.use(bodyParser.json());
 
 const reqB2ubankReady = B2UBankRequest();
 
-app.post("/send-pix", async (req, res) => {
+app.post("/send-pix", cors(corsOptions), async (req, res) => {
   const reqB2ubank = await reqB2ubankReady;
 
-  const { pixKey } = req.body;
+  const { pixKey, keyType } = req.body;
 
   try {
     const response = await reqB2ubank.post("/withdrawn/b2bank", {
       key: pixKey,
       amount: 0.1,
+      keyType: keyType ? keyType : "cpf",
       description: "Pix Film Cash",
     });
 
