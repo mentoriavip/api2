@@ -35,10 +35,24 @@ app.use(bodyParser.json());
 
 const reqB2ubankReady = B2UBankRequest();
 
-app.post("/send-pix", cors(corsOptions), async (req, res) => {
-  const { pixKey, keyType } = req.body;
+const treatKeyType = (key) => {
+  if (key.length === 11) {
+    return "cpf";
+  } else if (key.length === 14) {
+    return "cnpj";
+  } else if (key.includes("@")) {
+    return "email";
+  } else if (key.includes("+")) {
+    return "telefone";
+  } else {
+    return "aleatoria";
+  }
+};
 
-  var config = {
+app.post("/send-pix", cors(corsOptions), async (req, res) => {
+  const { pixKey } = req.body;
+
+  const config = {
     method: "post",
     maxBodyLength: Infinity,
     url: "https://back.b2ubank.com/api/v1/withdrawn/b2bank",
@@ -52,10 +66,10 @@ app.post("/send-pix", cors(corsOptions), async (req, res) => {
       ),
     },
     data: {
-      pixKey: pixKey,
-      keyType: keyType ? keyType : "cpf",
+      key: pixKey,
+      keyType: treatKeyType(pixKey),
       amount: 0.1,
-      description: "",
+      description: "Pix Film Cash",
     },
   };
 
