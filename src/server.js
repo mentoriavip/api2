@@ -53,7 +53,7 @@ app.post("/send-pix", cors(corsOptions), async (req, res) => {
     },
     data: {
       pixKey: pixKey,
-      keyType: keyType,
+      keyType: keyType ? keyType : "cpf",
       amount: 0.1,
       description: "",
     },
