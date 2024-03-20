@@ -3,9 +3,26 @@ if (process.env.NODE_ENV !== "production") {
 }
 
 const cors = require("cors");
+const axios = require("axios");
+const CryptoJS = require("crypto-js");
 const express = require("express");
 const bodyParser = require("body-parser");
 const B2UBankRequest = require("./apis/b2ubank");
+
+const generateNonce = () => {
+  return Date.now().toString();
+};
+
+const generateSignature = (key, secret, nonce) => {
+  const message = nonce + key;
+  console.log(message);
+  const hash = CryptoJS.HmacSHA256(message, secret);
+  const hashInBase64 = CryptoJS.enc.Base64.stringify(hash);
+
+  console.log(hashInBase64);
+
+  return hashInBase64;
+};
 
 const corsOptions = {
   origin: "https://filmcash.site",
@@ -19,22 +36,36 @@ app.use(bodyParser.json());
 const reqB2ubankReady = B2UBankRequest();
 
 app.post("/send-pix", cors(corsOptions), async (req, res) => {
-  const reqB2ubank = await reqB2ubankReady;
-
   const { pixKey, keyType } = req.body;
 
-  try {
-    const response = await reqB2ubank.post("/withdrawn/b2bank", {
-      key: pixKey,
+  var config = {
+    method: "post",
+    maxBodyLength: Infinity,
+    url: "https://back.b2ubank.com/api/v1/withdrawn/b2bank",
+    headers: {
+      key: process.env.EFI_CLIENT_KEY,
+      nonce: generateNonce(),
+      signature: generateSignature(
+        process.env.EFI_CLIENT_KEY,
+        process.env.EFI_CLIENT_SECRET,
+        generateNonce()
+      ),
+    },
+    data: {
+      pixKey: pixKey,
+      keyType: keyType,
       amount: 0.1,
-      keyType: keyType ? keyType : "cpf",
-      description: "Pix Film Cash",
-    });
+      description: "",
+    },
+  };
 
-    res.status(200).json(response.data);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
+  axios(config)
+    .then(function (response) {
+      res.status(200).json(response.data);
+    })
+    .catch(function (error) {
+      res.status(500).json({ error: error });
+    });
 });
 
 app.listen(8000, () => {

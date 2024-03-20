@@ -7,8 +7,11 @@ const generateNonce = () => {
 
 const generateSignature = (key, secret, nonce) => {
   const message = nonce + key;
+  console.log(message);
   const hash = CryptoJS.HmacSHA256(message, secret);
   const hashInBase64 = CryptoJS.enc.Base64.stringify(hash);
+
+  console.log(hashInBase64);
 
   return hashInBase64;
 };
