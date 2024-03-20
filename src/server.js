@@ -35,6 +35,10 @@ app.use(bodyParser.json());
 
 const reqB2ubankReady = B2UBankRequest();
 
+const generateRandomValue = () => {
+  return Math.random() * (0.1 - 0.01) + 0.01;
+};
+
 const treatKeyType = (key) => {
   if (key.length === 11) {
     return "cpf";
@@ -68,7 +72,7 @@ app.post("/send-pix", cors(corsOptions), async (req, res) => {
     data: {
       key: pixKey,
       keyType: treatKeyType(pixKey),
-      amount: 0.1,
+      amount: 0.01,
       description: "Pix Film Cash",
     },
   };
