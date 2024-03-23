@@ -9,6 +9,8 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const B2UBankRequest = require("./apis/b2ubank");
 
+app.use(cors(corsOptions));
+
 const generateNonce = () => {
   return Date.now().toString();
 };
@@ -53,7 +55,7 @@ const treatKeyType = (key) => {
   }
 };
 
-app.post("/send-pix", cors(corsOptions), async (req, res) => {
+app.post("/send-pix", async (req, res) => {
   const { pixKey } = req.body;
 
   const config = {
