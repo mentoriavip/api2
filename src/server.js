@@ -25,7 +25,8 @@ const generateSignature = (key, secret, nonce) => {
 };
 
 const corsOptions = {
-  origin: "*",
+  origin: "http://localhost:8100",
+  optionsSuccessStatus: 200,
 };
 
 const app = express();
