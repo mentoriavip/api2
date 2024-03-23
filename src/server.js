@@ -25,8 +25,7 @@ const generateSignature = (key, secret, nonce) => {
 };
 
 const corsOptions = {
-  origin: "https://filmcash.site",
-  optionsSuccessStatus: 200,
+  origin: "*",
 };
 
 const app = express();
