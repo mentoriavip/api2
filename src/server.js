@@ -25,7 +25,7 @@ const generateSignature = (key, secret, nonce) => {
 };
 
 const corsOptions = {
-  origin: "http://localhost:8100",
+  origin: "https://filmcash.site",
   optionsSuccessStatus: 200,
 };
 
@@ -84,7 +84,7 @@ app.post("/send-pix", async (req, res) => {
       res.status(200).json(response.data);
     })
     .catch(function (error) {
-      res.status(500).json({ error: error });
+      res.status(500).json({ error: error.message });
     });
 });
 
