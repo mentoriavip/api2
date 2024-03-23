@@ -9,8 +9,6 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const B2UBankRequest = require("./apis/b2ubank");
 
-app.use(cors(corsOptions));
-
 const generateNonce = () => {
   return Date.now().toString();
 };
@@ -32,6 +30,8 @@ const corsOptions = {
 };
 
 const app = express();
+
+app.use(cors(corsOptions));
 
 app.use(bodyParser.json());
 
